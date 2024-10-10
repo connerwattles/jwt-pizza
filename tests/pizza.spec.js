@@ -122,6 +122,45 @@ test("purchase with login", async ({ page }) => {
 });
 
 test("register a user and login", async ({ page }) => {
+  // Mock the POST request to the register endpoint
+  await page.route("**/api/register", async (route) => {
+    const registerReq = {
+      name: "John Doe",
+      email: "JohnDoe@test.com",
+      password: "Password123",
+    };
+    const registerRes = {
+      user: {
+        id: 1,
+        name: "John Doe",
+        email: "JohnDoe@test.com",
+      },
+      token: "abcdef",
+    };
+    expect(route.request().method()).toBe("POST");
+    expect(route.request().postDataJSON()).toMatchObject(registerReq);
+    await route.fulfill({ json: registerRes });
+  });
+
+  // Mock the POST request to the login endpoint
+  await page.route("**/api/login", async (route) => {
+    const loginReq = {
+      email: "JohnDoe@test.com",
+      password: "Password123",
+    };
+    const loginRes = {
+      user: {
+        id: 1,
+        name: "John Doe",
+        email: "JohnDoe@test.com",
+      },
+      token: "abcdef",
+    };
+    expect(route.request().method()).toBe("POST");
+    expect(route.request().postDataJSON()).toMatchObject(loginReq);
+    await route.fulfill({ json: loginRes });
+  });
+
   const randomString = Math.random().toString(36).substring(2, 15);
   const email = `JohnDoe${randomString}@test.com`;
 
@@ -176,6 +215,25 @@ test("franchise, about, and history pages", async ({ page }) => {
 });
 
 test("diner dashboard", async ({ page }) => {
+  // Mock the POST request to the login endpoint
+  await page.route("**/api/login", async (route) => {
+    const loginReq = {
+      email: "JohnDoe@test.com",
+      password: "Password123",
+    };
+    const loginRes = {
+      user: {
+        id: 1,
+        name: "John Doe",
+        email: "JohnDoe@test.com",
+      },
+      token: "abcdef",
+    };
+    expect(route.request().method()).toBe("POST");
+    expect(route.request().postDataJSON()).toMatchObject(loginReq);
+    await route.fulfill({ json: loginRes });
+  });
+
   await page.goto("http://localhost:5173/");
   await expect(page.getByRole("heading")).toContainText("The web's best pizza");
   await page.getByRole("link", { name: "Login" }).click();
@@ -200,6 +258,26 @@ test("docs", async ({ page }) => {
 });
 
 test("admin dashboard", async ({ page }) => {
+  // Mock the POST request to the login endpoint
+  await page.route("**/api/login", async (route) => {
+    const loginReq = {
+      email: "a@jwt.com",
+      password: "admin",
+    };
+    const loginRes = {
+      user: {
+        id: 1,
+        name: "Admin",
+        email: "a@jwt.com",
+        roles: [{ role: "admin" }],
+      },
+      token: "abcdef",
+    };
+    expect(route.request().method()).toBe("POST");
+    expect(route.request().postDataJSON()).toMatchObject(loginReq);
+    await route.fulfill({ json: loginRes });
+  });
+
   await page.goto("http://localhost:5173/");
   await expect(page.getByRole("heading")).toContainText("The web's best pizza");
   await page.getByRole("link", { name: "Login" }).click();
