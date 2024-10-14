@@ -350,3 +350,13 @@ test("admin dashboard", async ({ page }) => {
   // await page.getByRole("link", { name: "home" }).click();
   // await expect(page.getByRole("heading")).toContainText("The web's best pizza");
 });
+
+test("failed login", async ({ page }) => {
+  await page.goto("http://localhost:5173/");
+  await page.getByRole("link", { name: "Login" }).click();
+  await page.getByPlaceholder("Email address").click();
+  await page.getByPlaceholder("Email address").fill("d@jwt.com");
+  await page.getByPlaceholder("Email address").press("Tab");
+  await page.getByPlaceholder("Password").fill("a");
+  await page.getByRole("button", { name: "Login" }).click();
+});
