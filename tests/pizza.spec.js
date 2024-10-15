@@ -262,6 +262,36 @@ test("docs", async ({ page }) => {
   await expect(page.getByRole("heading")).toContainText("The web's best pizza");
 });
 
+test("authenticated docs", async ({ page }) => {
+  await page.route("*/**/api/auth", async (route) => {
+    const loginReq = { email: "a@jwt.com", password: "admin" };
+    const loginRes = {
+      user: {
+        id: 3,
+        name: "常用名字",
+        email: "a@jwt.com",
+        roles: [{ role: "admin" }],
+      },
+      token: "abcdef",
+    };
+    expect(route.request().method()).toBe("PUT");
+    expect(route.request().postDataJSON()).toMatchObject(loginReq);
+    await route.fulfill({ json: loginRes });
+  });
+
+  await page.goto("http://localhost:5173");
+  await page.getByRole("link", { name: "Login" }).click();
+  await page.getByPlaceholder("Email address").click();
+  await page.getByPlaceholder("Email address").fill("a@jwt.com");
+  await page.getByPlaceholder("Email address").press("Tab");
+  await page.getByPlaceholder("Password").fill("admin");
+  await page.getByRole("button", { name: "Login" }).click();
+  await page.goto("http://localhost:5173/docs");
+  await expect(page.getByRole("main")).toContainText("JWT Pizza API");
+  await page.getByRole("link", { name: "home" }).click();
+  await expect(page.getByRole("heading")).toContainText("The web's best pizza");
+});
+
 test("admin dashboard", async ({ page }) => {
   await page.route("*/**/api/auth", async (route) => {
     const loginReq = { email: "a@jwt.com", password: "admin" };
