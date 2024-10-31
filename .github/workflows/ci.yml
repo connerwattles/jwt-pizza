@@ -92,3 +92,24 @@ jobs:
           # Wait for the distribution to deploy and then invalidate the cache
           while [ "$(aws cloudfront get-distribution --id ${{ secrets.DISTRIBUTION_ID }} --query 'Distribution.Status' --output text)" != "Deployed" ]; do echo "Distribution is still updating..."; sleep 5; done
           aws cloudfront create-invalidation --distribution-id ${{ secrets.DISTRIBUTION_ID }} --paths "/*"
+
+  release:
+    needs:
+      - build
+      - deploy
+    runs-on: ubuntu-latest
+    env:
+      version: ${{needs.build.outputs.version}}
+    steps:
+      - name: Create staging release
+        uses: ncipollo/release-action@v1
+        with:
+          tag: stage-version-${{ env.version }}
+          name: Staging ${{ env.version }}
+          generateReleaseNotes: true
+          body: |
+            ## Description
+
+            ${{ github.event.head_commit.message }}
+
+            **commit**: ${{ github.sha }}
