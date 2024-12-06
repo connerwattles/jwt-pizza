@@ -1,5 +1,10 @@
 # Curiosity Report: Docker vs. Kubernetes
 
+<p align="center">
+  <img src="https://www.docker.com/wp-content/uploads/2022/03/Moby-logo.png" alt="Docker Logo" width="200" style="margin-right: 300px;">
+  <img src="https://kubernetes.io/images/wheel.svg" alt="Kubernetes Logo" width="200">
+</p>
+
 ## Introduction
 
 During my summer internship as a Data Platforms Engineer Intern at Dexcom's DevOps team in San Diego, I had the opportunity to work with both Docker and Kubernetes. While building a service called Kafka Concierge, I first tested the service using Docker and later deployed it in a Kubernetes cluster managed by my team. This experience exposed me to the capabilities and differences of these two tools, but I wanted to explore their differences more deeply to understand how they complement each other in modern DevOps practices.
@@ -65,4 +70,4 @@ Through this research, I learned that Docker and Kubernetes are not competitors 
 
 ## Conclusion
 
-Understanding the differences between Docker and Kubernetes has deepened my appreciation for their roles in modern DevOps. My internship experience gave me a practical introduction to these technologies, but this report has expanded my theoretical knowledge. As I continue to explore tools like Kubernetes, I look forward to leveraging this curiosity-driven learning in future roles.
+Understanding the differences between Docker and Kubernetes has deepened my appreciation for their roles in modern DevOps. My internship experience gave me a practical introduction to these technologies, but this report has expanded my theoretical knowledge. As I continue to explore tools like Kubernetes, I look forward to exploring the possibilites of DevOps. There is a high likelyhood that I could be working full time for the same team I worked as an intern for at Dexcom and this class and the things I have learned make me excited and confident for future opportunities.
